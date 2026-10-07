@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آسان خرید | فروشگاه آنلاین</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- نوار بالایی -->
+    <header>
+        <div class="logo">🛒 آسان خرید</div>
+        <nav>
+            <button class="nav-btn active" onclick="showPage('home')">خانه</button>
+            <button class="nav-btn" onclick="showPage('products')">محصولات</button>
+            <button class="nav-btn" onclick="showPage('seller')">فروشنده</button>
+            <button class="nav-btn" onclick="showPage('delivery')">دلیور</button>
+        </nav>
+    </header>
+
+    <!-- صفحه اصلی -->
+    <main id="page-home" class="page active">
+        <section class="hero">
+            <h1>خوش آمدید به آسان خرید</h1>
+            <p>خرید آسان، مطمئن و سریع</p>
+            <div class="hero-buttons">
+                <button class="btn primary" onclick="showPage('products')">مشاهده محصولات</button>
+                <button class="btn secondary" onclick="showPage('seller')">فروشنده هستید؟</button>
+            </div>
+        </section>
+
+        <!-- دسته بندی ها -->
+        <section class="categories">
+            <h2>دسته بندی ها</h2>
+            <div class="category-grid">
+                <div class="category-card" onclick="filterByCategory('لباس زنانه')">لباس زنانه</div>
+                <div class="category-card" onclick="filterByCategory('لباس مردانه')">لباس مردانه</div>
+                <div class="category-card" onclick="filterByCategory('لباس بچه گانه')">لباس بچه گانه</div>
+                <div class="category-card" onclick="filterByCategory('لوازم برقی')">لوازم برقی</div>
+                <div class="category-card" onclick="filterByCategory('لوازم خانه')">لوازم خانه</div>
+                <div class="category-card" onclick="filterByCategory('تکنالوژی')">تکنالوژی</div>
+            </div>
+        </section>
+
+        <!-- تبلیغات -->
+        <section class="ads-section">
+            <h2>📢 تبلیغات ویژه</h2>
+            <div class="ads-container" id="adsContainer">
+                <p class="empty-info">محصولات ویژه در اینجا نمایش داده می شوند</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- صفحه محصولات -->
+    <main id="page-products" class="page">
+        <div class="page-header">
+            <h2>لیست محصولات</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="جستجوی محصول..." oninput="searchProducts()">
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterByCategory('all')">همه</button>
+            <button class="filter-btn" onclick="filterByCategory('لباس زنانه')">لباس زنانه</button>
+            <button class="filter-btn" onclick="filterByCategory('لباس مردانه')">لباس مردانه</button>
+            <button class="filter-btn" onclick="filterByCategory('لباس بچه گانه')">لباس بچه گانه</button>
+            <button class="filter-btn" onclick="filterByCategory('لوازم برقی')">لوازم برقی</button>
+            <button class="filter-btn" onclick="filterByCategory('لوازم خانه')">لوازم خانه</button>
+            <button class="filter-btn" onclick="filterByCategory('تکنالوژی')">تکنالوژی</button>
+        </div>
+
+        <div class="products-grid" id="productsList">
+            <p class="loading">در حال بارگذاری محصولات...</p>
+        </div>
+    </main>
+
+    <!-- صفحه فروشنده -->
+    <main id="page-seller" class="page">
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="showSellerTab('login')">ورود فروشنده</button>
+            <button class="auth-tab" onclick="showSellerTab('register')">ثبت نام فروشنده</button>
+        </div>
+
+        <!-- فرم ثبت نام فروشنده -->
+        <div id="seller-register" class="auth-form">
+            <h3>ثبت نام فروشنده جدید</h3>
+            <input type="text" id="sellerStoreName" placeholder="نام فروشگاه" required>
+            <input type="text" id="sellerFullName" placeholder="نام کامل فروشنده" required>
+            <input type="text" id="sellerWhatsapp" placeholder="شماره واتس اپ" required>
+            <input type="email" id="sellerEmail" placeholder="آدرس ایمیل" required>
+            <input type="text" id="sellerAddress" placeholder="آدرس فروشگاه" required>
+            <input type="password" id="sellerPassword" placeholder="رمز عبور" required>
+            <button class="btn primary full" onclick="registerSeller()">ثبت نام</button>
+        </div>
+
+        <!-- فرم ورود فروشنده -->
+        <div id="seller-login" class="auth-form">
+            <h3>ورود به پنل فروشنده</h3>
+            <input type="email" id="loginEmail" placeholder="ایمیل" required>
+            <input type="password" id="loginPassword" placeholder="رمز عبور" required>
+            <button class="btn primary full" onclick="loginSeller()">ورود</button>
+        </div>
+
+        <!-- پنل فروشنده (مخفی) -->
+        <div id="seller-dashboard" class="dashboard" style="display: none;">
+            <div class="dashboard-header">
+                <h3>پنل فروشنده: <span id="sellerName"></span></h3>
+                <button class="btn secondary" onclick="logoutSeller()">خروج</button>
+            </div>
+
+            <div class="dashboard-tabs">
+                <button class="dash-tab active" onclick="showDashTab('addProduct')">افزودن محصول</button>
+                <button class="dash-tab" onclick="showDashTab('myProducts')">محصولات من</button>
+                <button class="dash-tab" onclick="showDashTab('myOrders')">سفارشات</button>
+            </div>
+
+            <!-- افزودن محصول -->
+            <div id="dash-addProduct" class="dash-content active">
+                <h4>ثبت محصول جدید</h4>
+                <input type="text" id="productName" placeholder="نام محصول" required>
+                <select id="productCategory">
+                    <option value="لباس زنانه">لباس زنانه</option>
+                    <option value="لباس مردانه">لباس مردانه</option>
+                    <option value="لباس بچه گانه">لباس بچه گانه</option>
+                    <option value="لوازم برقی">لوازم برقی</option>
+                    <option value="لوازم خانه">لوازم خانه</option>
+                    <option value="تکنالوژی">تکنالوژی</option>
+                </select>
+                <input type="number" id="productPrice" placeholder="قیمت واحد" required>
+                <input type="number" id="productWholesale" placeholder="قیمت عمده (اختیاری)">
+                <input type="number" id="productDiscount" placeholder="تخفیف % (اختیاری)">
+                <input type="text" id="productImage" placeholder="لینک عکس محصول (اختیاری)">
+                <button class="btn primary full" onclick="addNewProduct()">ثبت محصول</button>
+            </div>
+
+            <!-- محصولات من -->
+            <div id="dash-myProducts" class="dash-content">
+                <h4>محصولات من</h4>
+                <div id="sellerProductsList">
+                    <p class="empty-info">هنوز محصولی ثبت نکرده اید</p>
+                </div>
+            </div>
+
+            <!-- سفارشات من -->
+            <div id="dash-myOrders" class="dash-content">
+                <h4>سفارشات دریافتی</h4>
+                <div id="sellerOrdersList">
+                    <p class="empty-info">سفارش جدیدی دریافت نشده است</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- صفحه دلیور -->
+    <main id="page-delivery" class="page">
+        <h2>پنل دلیور</h2>
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="showDeliveryTab('login')">ورود دلیور</button>
+            <button class="auth-tab" onclick="showDeliveryTab('register')">ثبت نام دلیور</button>
+        </div>
+
+        <div id="delivery-register" class="auth-form">
+            <h3>ثبت نام دلیور جدید</h3>
+            <input type="text" id="delivName" placeholder="نام کامل" required>
+            <input type="text" id="delivPhone" placeholder="شماره تماس" required>
+            <input type="text" id="delivRegion" placeholder="منطقه فعالیت" required>
+            <button class="btn primary full" onclick="registerDelivery()">ثبت نام</button>
+        </div>
+
+        <div id="delivery-login" class="auth-form">
+            <h3>ورود دلیور</h3>
+            <input type="text" id="delivId" placeholder="کد دلیور" required>
+            <button class="btn primary full" onclick="loginDelivery()">ورود</button>
+        </div>
+
+        <div id="delivery-dashboard" class="dashboard" style="display: none;">
+            <div class="dashboard-header">
+                <h3>خوش آمدید: <span id="delivNameDisplay"></span></h3>
+                <button class="btn secondary" onclick="logoutDelivery()">خروج</button>
+            </div>
+            <h4>سفارشات برای تحویل</h4>
+            <div id="deliveryOrdersList">
+                <p class="empty-info">در حال حاضر سفارشی برای تحویل وجود ندارد</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- صفحه ثبت سفارش -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeOrderModal()">&times;</span>
+            <h3>ثبت سفارش</h3>
+            <p id="orderProductName"></p>
+            <input type="text" id="custName" placeholder="نام شما" required>
+            <input type="text" id="custPhone" placeholder="شماره تماس" required>
+            <input type="text" id="custAddress" placeholder="آدرس تحویل" required>
+            <input type="number" id="orderQty" placeholder="تعداد" min="1" value="1" oninput="calculateTotal()">
+            <p>قیمت کل: <span id="orderTotalPrice">0</span> افغانی</p>
+            <button class="btn primary full" onclick="submitOrder()">ثبت سفارش</button>
+        </div>
+    </div>
+
+    <!-- پیام ها -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
