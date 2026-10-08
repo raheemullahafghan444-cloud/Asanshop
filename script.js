@@ -1,5 +1,5 @@
 // ================= تنظیمات API =================
-const API_URL = "https://script.google.com/macros/s/AKfycbx6FHJI55Zm34TwiYHlZIRoGwgy5-a3ZDvOvnhk8n7pgaCwQmLQEBN32s0BMYwsxPk-/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwf50uSZwVEbhb1Uh2Gw4CqrtvxxUxwsBEKAcZGMed-jn-0rbqOPp65OyzDP67J27qyvQ/exec";
 
 // ================= داده های محلی =================
 let currentSeller = JSON.parse(localStorage.getItem('currentSeller') || 'null');
